@@ -9,11 +9,12 @@ import requests
 
 class Main:
     def __init__(self) -> None:
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome('/home/xbtio/Downloads/chromedriver_linux64 (1)/chromedriver')
         self.wait = WebDriverWait(self.driver, 10)
         self.url_forNames = 'https://kaspi.kz/shop/nur-sultan/c/categories/?page='
         self.user = fake_useragent.UserAgent().random
         self.header = {'user-agent': self.user}
+        self.idd = 0
 
     def parseTheLinkForYernazar(self, item):
         link = item.find('a', 'item-card__name').get('href')
@@ -21,13 +22,17 @@ class Main:
         self.driver.implicitly_wait(10)
 
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
-        try:
-            table = soup.find('td', class_='sellers-table__cell')
-            link_item = table.find('a').get('href')
-            return link_item
-        except:
+        if soup.find('td', class_='sellers-table__cell') == None:
             link_item = '/shop/info/merchant/magnum/address-tab/?merchantId=Magnum'
-            return link_item
+        else:
+
+            table = soup.find('td', class_='sellers-table__cell')
+
+            link_item = table.find('a').get('href')
+        
+        return link_item
+            
+        
 
     def parseSellers_Info(self, link_item):
         link = f"https://kaspi.kz{link_item}"
