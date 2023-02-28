@@ -42,6 +42,8 @@ class Product:
             soup = BeautifulSoup(link_desc.text, 'lxml')
             description = soup.find(
                 'div', 'item__description-text').get_text()
+            category = soup.find_all('span', attrs={'itemprop':'name'})[1].get_text()
+            category = category.replace('\n', '').strip().replace('\t', '').replace('\r', '')
             # Редачим строки
             price = price.replace('\n', '').strip().replace(
                 '₸', '').replace(' ', '')
@@ -49,9 +51,8 @@ class Product:
             description = description.replace(
                 '\n', '').strip().replace("  ", '').strip()
             temp_list.append({'id': i, 'title': title, 'price': int(
-                price), 'description': description, 'link_product': new_url})
+                price), 'description': description, 'category': category,'link_product': new_url})
         #parses 12 items in one page 
         return temp_list
-
 
 

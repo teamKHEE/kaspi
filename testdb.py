@@ -22,18 +22,19 @@ class FillDB:
 
     def fill_db_with_product(self):
         parse = Product()
-        page = 1458
+        page = 1502
         while True:
             p = parse.parseProduct(page)
             for i in range(12):
-                postgres_insert_query = """INSERT INTO "bforabzal"(title, price, description, link_product, seller, phone_number) VALUES(%s, %s, %s, %s, %s, %s)"""
+                postgres_insert_query = """INSERT INTO "kaspidump"(title, price, description, link_product, category, seller, phone_number) VALUES(%s, %s, %s, %s, %s, %s, %s)"""
                 title = p[i]['title']
                 price = p[i]['price']
                 description = p[i]['description']
                 link_product = p[i]['link_product']
+                category = p[i]['category']
                 
                 seller = Seller().parseSellers(link_product)
-                record_to_insert = (title, price, description, link_product, seller[0], seller[1])
+                record_to_insert = (title, price, description, link_product, category, seller[0], seller[1])
                 self.cur.execute(postgres_insert_query, record_to_insert)
                 self.conn.commit()
                 print(f"Page {page}, index={i}. successfully inserted ")
