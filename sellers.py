@@ -38,7 +38,7 @@ class Seller:
             f"https://kaspi.kz{link}", headers=self.header)
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        if soup.find('h1', 'merchant-profile__name').get_text() == None:
+        if soup.find('h1', 'merchant-profile__name') == None:
             return ["No Info", "No Info"]
         else:
             name = soup.find('h1', 'merchant-profile__name').get_text()

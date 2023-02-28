@@ -22,7 +22,7 @@ class FillDB:
 
     def fill_db_with_product(self):
         parse = Product()
-        page = 1425
+        page = 1458
         while True:
             p = parse.parseProduct(page)
             for i in range(12):
@@ -31,6 +31,7 @@ class FillDB:
                 price = p[i]['price']
                 description = p[i]['description']
                 link_product = p[i]['link_product']
+                
                 seller = Seller().parseSellers(link_product)
                 record_to_insert = (title, price, description, link_product, seller[0], seller[1])
                 self.cur.execute(postgres_insert_query, record_to_insert)
