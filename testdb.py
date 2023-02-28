@@ -6,11 +6,11 @@ from sellers import Seller
 class FillDB:
     def __init__(self):
         self.conn = psycopg2.connect(
-            user="yernazarius",
-            password="admin",
+            user="test",
+            password="thyfh123",
             host="localhost",
             port="5432",
-            database="postgres")
+            database="mydb")
         self.cur = self.conn.cursor()
 
     def query(self, query):
@@ -26,12 +26,13 @@ class FillDB:
         while True:
             p = parse.parseProduct(page)
             for i in range(12):
-                postgres_insert_query = """INSERT INTO "bForAbzal"(title, price, description, link_product) VALUES(%s, %s, %s, %s)"""
+                postgres_insert_query = """INSERT INTO "bforabzal"(title, price, description, link_product, seller, phone_number) VALUES(%s, %s, %s, %s, %s, %s)"""
                 title = p[i]['title']
                 price = p[i]['price']
                 description = p[i]['description']
                 link_product = p[i]['link_product']
-                record_to_insert = (title, price, description, link_product)
+                seller = Seller().parseSellers(link_product)
+                record_to_insert = (title, price, description, link_product, seller[0], seller[1])
                 self.cur.execute(postgres_insert_query, record_to_insert)
                 self.conn.commit()
                 print(f"Page {page}, index={i}. successfully inserted ")
@@ -62,6 +63,6 @@ class FillDB:
 
 
 Bylygyp = FillDB()
-# Bylygyp.fill_db_with_product()
+Bylygyp.fill_db_with_product()
 # Bylygyp.fill_db_with_seller()
 # Bylygyp.update_prod_db()
