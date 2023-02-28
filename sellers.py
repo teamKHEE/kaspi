@@ -11,7 +11,7 @@ import time
 
 class Seller:
     def __init__(self) -> None:
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome('/home/xbtio/Downloads/chromedriver_linux64 (1)/chromedriver')
         self.wait = WebDriverWait(self.driver, 10)
         self.url_forNames = 'https://kaspi.kz/shop/nur-sultan/c/categories/?page='
         self.user = fake_useragent.UserAgent().random
@@ -29,15 +29,20 @@ class Seller:
             return link_item
         else:
             return "No Info"
-
+        
     def parseSellers(self, seller_link) -> list:
-        if seller_link == "No Info":
+        link = self.find_td(seller_link)
+        if link == "No Info":
             return ["No Info", "No Info"]
         response = requests.get(
-            f"https://kaspi.kz{seller_link}", headers=self.header)
+            f"https://kaspi.kz{link}", headers=self.header)
         soup = BeautifulSoup(response.text, 'html.parser')
-        name = soup.find('h1', 'merchant-profile__name').get_text()
-        number = soup.find('span', 'merchant-profile__contact-text').get_text()
+
+        if soup.find('h1', 'merchant-profile__name').get_text() == None:
+            return ["No Info", "No Info"]
+        else:
+            name = soup.find('h1', 'merchant-profile__name').get_text()
+            number = soup.find('span', 'merchant-profile__contact-text').get_text()
         return [name, number]
 
     def drugSellers(self, links) -> list:
@@ -47,3 +52,4 @@ class Seller:
             # print(seller_link)
             seller_info.append(self.parseSellers(seller_link))
         return seller_info
+

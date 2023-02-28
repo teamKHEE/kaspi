@@ -22,7 +22,7 @@ class Product:
         self.user = fake_useragent.UserAgent().random
         self.header = {'user-agent': self.user}
 
-    def parseProduct(self, page):
+    def parseProduct(self, page) -> list: # returns a list of dictionaries
         i = 0
         temp_list = []
 
@@ -50,7 +50,8 @@ class Product:
                 '\n', '').strip().replace("  ", '').strip()
             temp_list.append({'id': i, 'title': title, 'price': int(
                 price), 'description': description, 'link_product': new_url})
+        #parses 12 items in one page 
         return temp_list
 
 
-Bylygyp = Product()
+
